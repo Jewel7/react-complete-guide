@@ -21,3 +21,7 @@ body {
   text-align: center;
   color: #e6ddf9;
 }
+
+.post {
+  background-color: blue;
+}
