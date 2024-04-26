@@ -2,21 +2,17 @@
 //files as .modules.css also gives you unique class names
 import styles from "./Post.module.css";
 
-type PostProps = {
+export interface PostProps {
   author: string;
   body: string;
-};
+}
 
-function Post(props: PostProps) {
-  // function getRandomName() {
-  //   const randomIndex = Math.floor(Math.random() * names.length);
-  //   return names[randomIndex];
-  // }
-
+//you could pass the props as an object or define each individual props surrounded by {}
+function Post({ author, body }: PostProps) {
   return (
     <li className={styles.post}>
-      <p className={styles.author}>{props.author}</p>
-      <p className={styles.body}>{props.body}</p>
+      <p className={styles.author}>{author}</p>
+      <p className={styles.body}>{body}</p>
     </li>
   );
 }
