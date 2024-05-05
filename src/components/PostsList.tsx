@@ -2,6 +2,7 @@ import Post from "./Post";
 import styles from "./PostsList.module.css";
 import NewPost from "./NewPost";
 import { useState } from "react";
+import Modal from "./Modal";
 
 // ---- LIFTING STATE UP-----
 //if you have state that's manipulated in component A, but needed in component B, you should
@@ -30,12 +31,20 @@ export function PostsLists() {
   // In functional programming languages, functions are also first-class citizens. This means you can do things
   // like assign a function to a variable, pass a function as an argument to another function,
   // or have a function return another function.
+
+  // if you wrap content with another custom component, by default, React doesn't where to put the content.
+  // you have to tell React where to put the content by using props.children
+  // the wrapper (Modal) is given a child component (NewPost), but in the Modal wrapper, it has to define
+  // WHERE to put the child component by using props.children
   return (
     <>
-      <NewPost
-        onBodyChange={bodyChangeHandler}
-        onAuthorChange={authorChangeHandler}
-      />
+      <Modal>
+        <NewPost
+          onBodyChange={bodyChangeHandler}
+          onAuthorChange={authorChangeHandler}
+        />
+      </Modal>
+
       <ul className={styles.posts}>
         <Post author={enteredAuthor} body={enteredBody} />
         <Post author="Nick" body="Goodbye, world!" />
