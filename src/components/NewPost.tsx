@@ -1,9 +1,15 @@
 import classes from "./NewPost.module.css";
+import { useState } from "react";
 
 function NewPost() {
+  // stores a new value in memory but also rexecutes the function in which the state was registered
+  // array destructuring
+  // [current value, updater for currentvalue] = useState(initial value);
+  const [enteredBody, setEnteredBody] = useState("");
+
   // we automatically get the event object as an argument to the event handler
   function changeBodyHandler(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    console.log(event.target.value);
+    setEnteredBody(event.target.value);
   }
 
   // calling () after the function name will execute the function, so just use the function name to pass it to the event listener
@@ -18,6 +24,7 @@ function NewPost() {
         <label htmlFor="body">Text</label>
         <textarea id="body" required rows={3} onChange={changeBodyHandler} />
       </p>
+      <p>{enteredBody}</p>
       <p>
         <label htmlFor="name">Your name</label>
         <input type="text" id="name" required />
