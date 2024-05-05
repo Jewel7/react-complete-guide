@@ -11,13 +11,14 @@ import Modal from "./Modal";
 // and pass the state and the event handlers to the child components
 
 export function PostsLists() {
-  // stores a new value in memory but also rexecutes the function in which the state was registered
-  // array destructuring
-  // [current value, updater for currentvalue] = useState(initial value);
+  const [modalIsVisible, setModalIsVisible] = useState(true);
   const [enteredBody, setEnteredBody] = useState("");
-
   const [enteredAuthor, setEnteredAuthor] = useState("");
-  // we automatically get the event object as an argument to the event handler
+
+  function hideModalHandler() {
+    setModalIsVisible(false);
+  }
+
   function bodyChangeHandler(event: React.ChangeEvent<HTMLTextAreaElement>) {
     setEnteredBody(event.target.value);
   }
@@ -26,24 +27,46 @@ export function PostsLists() {
     setEnteredAuthor(event.target.value);
   }
 
-  // calling () after the function name will execute the function, so just use the function name to pass it to the event listener
-  // functions are first-class citizens in JavaScript, so you can pass them around like any other value
-  // In functional programming languages, functions are also first-class citizens. This means you can do things
-  // like assign a function to a variable, pass a function as an argument to another function,
-  // or have a function return another function.
+  // ---ALTERNATIVE TO CONDITIONAL RENDERING BELOW---
+  // APPROACH 1: you can store JSX code in variables as well.
 
-  // if you wrap content with another custom component, by default, React doesn't where to put the content.
-  // you have to tell React where to put the content by using props.children
-  // the wrapper (Modal) is given a child component (NewPost), but in the Modal wrapper, it has to define
-  // WHERE to put the child component by using props.children
+  //   let modalContent;
+
+  //   if (modalIsVisible) {
+  //     modalContent = (
+  //       <Modal onClose={hideModalHandler}>
+  //         <NewPost
+  //           onBodyChange={bodyChangeHandler}
+  //           onAuthorChange={authorChangeHandler}
+  //         />
+  //       </Modal>
+  //     );
+  //   }
+
+  // APPROACH 2: ternary expression
+  // APPROACH 3: short-circuiting, where the second operand is not evaluated if the first operand is sufficient
+  // to determine the result. If the modal is truthy, then the component is rendered
+
   return (
     <>
-      <Modal>
-        <NewPost
-          onBodyChange={bodyChangeHandler}
-          onAuthorChange={authorChangeHandler}
-        />
-      </Modal>
+      {/* {modalContent} */}
+      {/* {modalIsVisible ? (
+        <Modal onClose={hideModalHandler}>
+          <NewPost
+            onBodyChange={bodyChangeHandler}
+            onAuthorChange={authorChangeHandler}
+          />
+        </Modal>
+      ) : null} */}
+
+      {modalIsVisible && (
+        <Modal onClose={hideModalHandler}>
+          <NewPost
+            onBodyChange={bodyChangeHandler}
+            onAuthorChange={authorChangeHandler}
+          />
+        </Modal>
+      )}
 
       <ul className={styles.posts}>
         <Post author={enteredAuthor} body={enteredBody} />
