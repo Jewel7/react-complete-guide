@@ -10,14 +10,9 @@ import Modal from "./Modal";
 // for example, NewPost and Post need the same state, so we lift the state up to PostsList
 // and pass the state and the event handlers to the child components
 
-export function PostsLists() {
-  const [modalIsVisible, setModalIsVisible] = useState(true);
+export function PostsLists({ isPosting, onStopPosting }) {
   const [enteredBody, setEnteredBody] = useState("");
   const [enteredAuthor, setEnteredAuthor] = useState("");
-
-  function hideModalHandler() {
-    setModalIsVisible(false);
-  }
 
   function bodyChangeHandler(event: React.ChangeEvent<HTMLTextAreaElement>) {
     setEnteredBody(event.target.value);
@@ -49,18 +44,8 @@ export function PostsLists() {
 
   return (
     <>
-      {/* {modalContent} */}
-      {/* {modalIsVisible ? (
-        <Modal onClose={hideModalHandler}>
-          <NewPost
-            onBodyChange={bodyChangeHandler}
-            onAuthorChange={authorChangeHandler}
-          />
-        </Modal>
-      ) : null} */}
-
-      {modalIsVisible && (
-        <Modal onClose={hideModalHandler}>
+      {isPosting && (
+        <Modal onClose={onStopPosting}>
           <NewPost
             onBodyChange={bodyChangeHandler}
             onAuthorChange={authorChangeHandler}
