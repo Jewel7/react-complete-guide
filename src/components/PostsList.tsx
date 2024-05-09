@@ -3,6 +3,7 @@ import styles from "./PostsList.module.css";
 import NewPost from "./NewPost";
 import { useState } from "react";
 import Modal from "./Modal";
+
 /**
  * CALLBACK FUNCTIONS: In React, a callback function is a function that is passed as a prop to a child component and is invoked by the child component at some point.
  * This allows the child component to send data back to the parent component or to notify it about certain events.
@@ -19,9 +20,8 @@ export function PostsLists({ isPosting, onStopPosting }) {
     // so don't do this  --> setPosts([postData, ...posts]);
     // instead, do this...you automatically get you the old state, so you can use that to return the new state
     // This ensures that React ensures that you get the latest correct state even if you have multiple pending state updates
-    setPosts((existingPosts) => {
-      [postData, ...existingPosts];
-    });
+
+    setPosts((existingPosts) => [postData, ...existingPosts]);
   }
 
   return (
@@ -32,9 +32,24 @@ export function PostsLists({ isPosting, onStopPosting }) {
         </Modal>
       )}
 
-      <ul className={styles.posts}>
-        <Post author="Nick" body="Goodbye, world!" />
-      </ul>
+      {/* if the posts array has at least one post, output the list of posts */}
+      {/* short-circuiting:If the first operand is falsy, JavaScript stops evaluation and returns the first operand. 
+      If the first operand is truthy, JavaScript evaluates the second operand and returns its value. */}
+      {posts.length > 0 && (
+        <ul className={styles.posts}>
+          {posts.map((post) => (
+            // transform our array of post object into an array of JSX elements, one post element per post object
+            <Post key={post.body} author={post.author} body={post.body} />
+          ))}
+        </ul>
+      )}
+      {/* display this if there are no posts */}
+      {posts.length === 0 && (
+        <div style={{ textAlign: "center", color: "white" }}>
+          <h2> There are no posts yet.</h2>
+          <p>Start adding some!</p>
+        </div>
+      )}
     </>
   );
 }
