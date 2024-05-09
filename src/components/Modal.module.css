@@ -8,6 +8,9 @@
   z-index: 1;
 }
 
+/* If two elements have the same z-index, then the stacking order is determined by their order in the HTML. 
+/* The element that comes later in the HTML will appear on top of the element that comes earlier. */
+
 .modal {
   border: none;
   border-radius: 6px;
