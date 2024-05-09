@@ -3,7 +3,7 @@ import { useState } from "react";
 
 //you could pass the props as an object or define each individual props surrounded by {}
 // ex... props could be {onBodyChange} or {props.onBodyChange}
-function NewPost({ onCancel }) {
+function NewPost({ onCancel, onAddPost }) {
   const [enteredBody, setEnteredBody] = useState("");
   const [enteredAuthor, setEnteredAuthor] = useState("");
 
@@ -25,6 +25,7 @@ function NewPost({ onCancel }) {
     };
 
     console.log(postData);
+    onAddPost(postData);
     onCancel();
   }
   return (
