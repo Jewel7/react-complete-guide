@@ -20,7 +20,13 @@ export function PostsLists({ isPosting, onStopPosting }) {
     // so don't do this  --> setPosts([postData, ...posts]);
     // instead, do this...you automatically get you the old state, so you can use that to return the new state
     // This ensures that React ensures that you get the latest correct state even if you have multiple pending state updates
-
+    fetch("http://localhost:8080/posts", {
+      method: "POST",
+      body: JSON.stringify(postData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     setPosts((existingPosts) => [postData, ...existingPosts]);
   }
 
