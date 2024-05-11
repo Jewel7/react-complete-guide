@@ -1,7 +1,7 @@
 import Post from "./Post";
 import styles from "./PostsList.module.css";
 import NewPost from "./NewPost";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "./Modal";
 
 /**
@@ -11,15 +11,28 @@ import Modal from "./Modal";
  * functions are also used for handling events, such as button clicks or form submissions.
  */
 export function PostsLists({ isPosting, onStopPosting }) {
-  // we manage a list of posts and that list should be edited whenever we submit a new post
   const [posts, setPosts] = useState([]);
 
+  // useEffect allows you to safely run code that would otherwise be unsafe to run in the render phase, such as
+  // setting state that would cause a re-render/infinite loops
+  // an empty array as the second argument to useEffect means that the effect will only run once, after the first component render
+  // GET REQUEST TO GET ALL THE POSTS IN THE BACKEND
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await fetch("http://localhost:8080/posts");
+      const resData = await response.json();
+      setPosts(resData.posts);
+    }
+
+    fetchPosts();
+  }, []);
+
+  // if you update state and that new state depends on the previous state,
+  // use the function form of the state update function
+  // so don't do this  --> setPosts([postData, ...posts]);
+  // instead, do this --> you automatically get the old state, so you can use that to return the new state
+  // This ensures that React ensures that you get the latest correct state, even if you have multiple pending state updates
   function addPostHandler(postData) {
-    // if you update state and that new state depends on the previous state,
-    // use the function form of the state update function
-    // so don't do this  --> setPosts([postData, ...posts]);
-    // instead, do this...you automatically get you the old state, so you can use that to return the new state
-    // This ensures that React ensures that you get the latest correct state even if you have multiple pending state updates
     fetch("http://localhost:8080/posts", {
       method: "POST",
       body: JSON.stringify(postData),
