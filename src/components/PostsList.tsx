@@ -13,18 +13,29 @@ import Modal from "./Modal";
 export function PostsLists({ isPosting, onStopPosting }) {
   const [posts, setPosts] = useState([]);
 
+  //use to show an alternative UI while fetching data
+  const [isFetching, setIsFetching] = useState(false);
+
   // useEffect allows you to safely run code that would otherwise be unsafe to run in the render phase, such as
   // setting state that would cause a re-render/infinite loops
   // an empty array as the second argument to useEffect means that the effect will only run once, after the first component render
   // GET REQUEST TO GET ALL THE POSTS IN THE BACKEND
   useEffect(() => {
     async function fetchPosts() {
+      setIsFetching(true);
       const response = await fetch("http://localhost:8080/posts");
       const resData = await response.json();
+      if (!response.ok) {
+        throw new Error(resData.message || "Failed to fetch posts.");
+      }
+
       setPosts(resData.posts);
+      setIsFetching(false);
     }
 
-    fetchPosts();
+    fetchPosts().catch((error) => {
+      console.error("Error fetching posts:" + error.message);
+    });
   }, []);
 
   // if you update state and that new state depends on the previous state,
@@ -54,7 +65,7 @@ export function PostsLists({ isPosting, onStopPosting }) {
       {/* if the posts array has at least one post, output the list of posts */}
       {/* short-circuiting:If the first operand is falsy, JavaScript stops evaluation and returns the first operand. 
       If the first operand is truthy, JavaScript evaluates the second operand and returns its value. */}
-      {posts.length > 0 && (
+      {!isFetching && posts.length > 0 && (
         <ul className={styles.posts}>
           {posts.map((post) => (
             // transform our array of post object into an array of JSX elements, one post element per post object
@@ -63,10 +74,15 @@ export function PostsLists({ isPosting, onStopPosting }) {
         </ul>
       )}
       {/* display this if there are no posts */}
-      {posts.length === 0 && (
+      {!isFetching && posts.length === 0 && (
         <div style={{ textAlign: "center", color: "white" }}>
           <h2> There are no posts yet.</h2>
           <p>Start adding some!</p>
+        </div>
+      )}
+      {isFetching && (
+        <div style={{ textAlign: "center", color: "white" }}>
+          <p>Loading...</p>{" "}
         </div>
       )}
     </>
