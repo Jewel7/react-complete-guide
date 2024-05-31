@@ -1,10 +1,11 @@
 import classes from "./NewPost.module.css";
 import { useState } from "react";
 import Modal from "../components/Modal";
+import { Link } from "react-router-dom";
 
 //you could pass the props as an object or define each individual props surrounded by {}
 // ex... props could be {onBodyChange} or {props.onBodyChange}
-function NewPost({ onCancel, onAddPost }) {
+function NewPost({ onAddPost }) {
   const [enteredBody, setEnteredBody] = useState("");
   const [enteredAuthor, setEnteredAuthor] = useState("");
 
@@ -47,9 +48,9 @@ function NewPost({ onCancel, onAddPost }) {
         <p className={classes.actions}>
           {/* buttons added to a form will submit the form, by default  */}
           {/* to ensure that the cancel button doesn't trigger a form submission, give it a type of button */}
-          <button type="button" onClick={onCancel}>
+          <Link to=".." type="button">
             Cancel
-          </button>
+          </Link>
           <button type="submit">Submit</button>
         </p>
       </form>
