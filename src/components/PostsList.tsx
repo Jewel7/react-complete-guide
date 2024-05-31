@@ -1,8 +1,7 @@
 import Post from "./Post";
 import styles from "./PostsList.module.css";
-import NewPost from "./NewPost";
+
 import { useState, useEffect } from "react";
-import Modal from "./Modal";
 
 /**
  * CALLBACK FUNCTIONS: In React, a callback function is a function that is passed as a prop to a child component and is invoked by the child component at some point.
@@ -10,7 +9,7 @@ import Modal from "./Modal";
  * it's how you can let parent components know about events happening in their child components. Callback
  * functions are also used for handling events, such as button clicks or form submissions.
  */
-export function PostsLists({ isPosting, onStopPosting }) {
+export function PostsLists() {
   const [posts, setPosts] = useState([]);
 
   //use to show an alternative UI while fetching data
@@ -56,12 +55,6 @@ export function PostsLists({ isPosting, onStopPosting }) {
 
   return (
     <>
-      {isPosting && (
-        <Modal onClose={onStopPosting}>
-          <NewPost onCancel={onStopPosting} onAddPost={addPostHandler} />
-        </Modal>
-      )}
-
       {/* if the posts array has at least one post, output the list of posts */}
       {/* short-circuiting:If the first operand is falsy, JavaScript stops evaluation and returns the first operand. 
       If the first operand is truthy, JavaScript evaluates the second operand and returns its value. */}

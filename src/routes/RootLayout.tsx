@@ -7,7 +7,6 @@ function RootLayout() {
   return (
     <>
       <MainHeader />
-
       <Outlet />
     </>
   );
