@@ -1,7 +1,6 @@
 import Post from "./Post";
 import styles from "./PostsList.module.css";
-
-import { useState, useEffect } from "react";
+import { useLoaderData } from "react-router-dom";
 
 /**
  * CALLBACK FUNCTIONS: In React, a callback function is a function that is passed as a prop to a child component and is invoked by the child component at some point.
@@ -10,32 +9,7 @@ import { useState, useEffect } from "react";
  * functions are also used for handling events, such as button clicks or form submissions.
  */
 export function PostsLists() {
-  const [posts, setPosts] = useState([]);
-
-  //use to show an alternative UI while fetching data
-  const [isFetching, setIsFetching] = useState(false);
-
-  // useEffect allows you to safely run code that would otherwise be unsafe to run in the render phase, such as
-  // setting state that would cause a re-render/infinite loops
-  // an empty array as the second argument to useEffect means that the effect will only run once, after the first component render
-  // GET REQUEST TO GET ALL THE POSTS IN THE BACKEND
-  useEffect(() => {
-    async function fetchPosts() {
-      setIsFetching(true);
-      const response = await fetch("http://localhost:8080/posts");
-      const resData = await response.json();
-      if (!response.ok) {
-        throw new Error(resData.message || "Failed to fetch posts.");
-      }
-
-      setPosts(resData.posts);
-      setIsFetching(false);
-    }
-
-    fetchPosts().catch((error) => {
-      console.error("Error fetching posts:" + error.message);
-    });
-  }, []);
+  const posts = useLoaderData();
 
   // if you update state and that new state depends on the previous state,
   // use the function form of the state update function
@@ -58,7 +32,7 @@ export function PostsLists() {
       {/* if the posts array has at least one post, output the list of posts */}
       {/* short-circuiting:If the first operand is falsy, JavaScript stops evaluation and returns the first operand. 
       If the first operand is truthy, JavaScript evaluates the second operand and returns its value. */}
-      {!isFetching && posts.length > 0 && (
+      {posts.length > 0 && (
         <ul className={styles.posts}>
           {posts.map((post) => (
             // transform our array of post object into an array of JSX elements, one post element per post object
@@ -67,15 +41,10 @@ export function PostsLists() {
         </ul>
       )}
       {/* display this if there are no posts */}
-      {!isFetching && posts.length === 0 && (
+      {posts.length === 0 && (
         <div style={{ textAlign: "center", color: "white" }}>
           <h2> There are no posts yet.</h2>
           <p>Start adding some!</p>
-        </div>
-      )}
-      {isFetching && (
-        <div style={{ textAlign: "center", color: "white" }}>
-          <p>Loading...</p>{" "}
         </div>
       )}
     </>
